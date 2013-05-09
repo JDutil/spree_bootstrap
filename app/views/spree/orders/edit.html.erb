@@ -18,16 +18,16 @@
           <%= render :partial => 'form', :locals => { :order_form => order_form } %>
         </div>
 
-        <div id="subtotal" data-hook class="columns sixteen alpha omega">
+        <div id="subtotal" data-hook class="alpha omega">
           <h5><%= Spree.t(:subtotal) %>: <span class="order-total"><%= @order.display_total.to_html %></span></h5>
         </div>
 
-        <div class="links columns sixteen alpha omega" data-hook="cart_buttons">
+        <div class="links alpha omega" data-hook="cart_buttons">
           <%= order_form.text_field :coupon_code, :size => 10, :placeholder => Spree.t(:coupon_code) %>
-          <%= button_tag :class => 'primary', :id => 'update-button' do %>
+          <%= button_tag :id => 'update-button' do %>
             <%= Spree.t(:update) %>
           <% end %>
-          <%= button_tag :class => 'button checkout primary', :id => 'checkout-link', :name => 'checkout' do %>
+          <%= button_tag :id => 'checkout-link', :name => 'checkout' do %>
             <%= Spree.t(:checkout) %>
           <% end %>
         </div>
@@ -38,9 +38,9 @@
   <div id="empty-cart" data-hook>
     <%= form_tag empty_cart_path, :method => :put do %>
       <p id="clear_cart_link" data-hook>
-        <%= submit_tag Spree.t(:empty_cart), :class => 'button gray' %>
+        <%= submit_tag Spree.t(:empty_cart), :class => '' %>
         <%= Spree.t(:or) %>
-        <%= link_to Spree.t(:continue_shopping), products_path, :class => 'continue button gray' %>
+        <%= link_to Spree.t(:continue_shopping), products_path, :class => 'button continue' %>
       </p>
     <% end %>
   </div>
