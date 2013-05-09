@@ -1,0 +1,33 @@
+<h3><%= Spree.t(:order_summary) %></h3>
+
+<table data-hook="order_summary">
+  <tbody>
+    <tr data-hook="item_total">
+      <td><strong><%= Spree.t(:item_total) %>:</strong></td>
+      <td><strong><%= order.display_item_total.to_html %></strong></td>
+    </tr>
+    <tbody id="summary-order-charges" data-hook>
+      <% order.adjustments.eligible.each do |adjustment| %>
+      <% next if (adjustment.originator_type == 'Spree::TaxRate') and (adjustment.amount == 0) %>
+        <tr>
+          <td><%= adjustment.label %>: </td>
+          <td><%= adjustment.display_amount.to_html %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tr data-hook="order_total">
+      <td><strong><%= Spree.t(:order_total) %>:</strong></td>
+      <td><strong><span id='summary-order-total'><%= @order.display_total.to_html %></span></strong></td>
+    </tr>
+    <% if order.price_adjustment_totals.present? %>
+      <tbody id="price-adjustments" data-hook="order_details_price_adjustments">
+        <% @order.price_adjustment_totals.each do |label, total| %>
+          <tr class="total">
+            <td><strong><%= label %></strong></td>
+            <td><strong><span><%= total.to_html %></span></strong></td>
+          </tr>
+        <% end %>
+      </tbody>
+    <% end %>
+  </tbody>
+</table>
