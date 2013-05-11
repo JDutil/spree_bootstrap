@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "Promotion adjustments", :js => true do
-  let!(:country) { create(:country, :name => "United States of America",:states_required => true) }
+  let!(:country) { create(:country, :name => "United States of America", :states_required => true) }
   let!(:state) { create(:state, :name => "Alabama", :country => country) }
   let!(:zone) { create(:zone) }
   let!(:shipping_method) { create(:shipping_method) }
@@ -32,12 +32,12 @@ describe "Promotion adjustments", :js => true do
     # OrdersController
     context "on the payment page" do
       before do
-
         visit spree.root_path
         click_link "RoR Mug"
         click_button "add-to-cart-button"
         click_button "Checkout"
         fill_in "order_email", :with => "spree@example.com"
+        click_button "Continue"
         fill_in "First Name", :with => "John"
         fill_in "Last Name", :with => "Smith"
         fill_in "Street Address", :with => "1 John Street"

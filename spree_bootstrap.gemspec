@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.requirements << 'none'
 
   s.add_dependency 'bootstrap-sass', '~> 2.3.1.0'
+  s.add_dependency 'spree_api'
   s.add_dependency 'spree_core', '~> 2.0.0.beta'
   s.add_dependency 'spree_frontend', '~> 2.0.0.beta'
 
@@ -28,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'rspec-rails',  '~> 2.13'
   s.add_development_dependency 'sass-rails'
+  s.add_development_dependency 'selenium-webdriver'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'sqlite3'
 end

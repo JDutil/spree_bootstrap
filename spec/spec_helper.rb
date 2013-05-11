@@ -11,6 +11,7 @@ require 'database_cleaner'
 require 'factory_girl'
 FactoryGirl.find_definitions
 require 'ffaker'
+require 'paperclip/matchers'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -21,10 +22,15 @@ require 'spree/testing_support/factories'
 require 'spree/testing_support/authorization_helpers'
 require 'spree/testing_support/capybara_ext'
 require 'spree/testing_support/controller_requests'
+require 'spree/testing_support/order_walkthrough'
+require 'spree/testing_support/preferences'
 require 'spree/testing_support/url_helpers'
 
 RSpec.configure do |config|
+  config.fixture_path = File.join(File.expand_path(File.dirname(__FILE__)), "fixtures")
+
   config.include FactoryGirl::Syntax::Methods
+  config.include Paperclip::Shoulda::Matchers
 
   # == URL Helpers
   #
@@ -34,6 +40,8 @@ RSpec.configure do |config|
   # current_path.should eql(spree.products_path)
   config.include Spree::TestingSupport::UrlHelpers
   config.include Spree::TestingSupport::ControllerRequests
+  config.include Spree::TestingSupport::Flash
+  config.include Spree::TestingSupport::Preferences
 
   # Capybara javascript drivers require transactional fixtures set to false, and we use DatabaseCleaner
   # to cleanup after each test instead.  Without transactional fixtures set to false the records created
@@ -51,8 +59,8 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
     # Set some configuration defaults.
-    # ActionMailer::Base.default_url_options[:host] = 'localhost'
-    Spree::Config[:layout] = 'spree/layouts/spree_application'
+    reset_spree_preferences
+    #Spree::Config[:layout] = 'spree/layouts/spree_application'
   end
 
   # After each spec clean the database.
