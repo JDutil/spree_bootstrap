@@ -202,8 +202,8 @@ describe "Checkout" do
     fill_in "#{address}_lastname", :with => "Bigg"
     fill_in "#{address}_address1", :with => "143 Swan Street"
     fill_in "#{address}_city", :with => "Richmond"
-    select "United States of America", :from => "#{address}_country_id"
-    select "Alabama", :from => "#{address}_state_id"
+    find(:select, "#{address}_country_id").first(:option, 'United States of America').select_option
+    find(:select, "#{address}_state_id").first(:option, 'Alabama').select_option
     fill_in "#{address}_zipcode", :with => "12345"
     fill_in "#{address}_phone", :with => "(555) 5555-555"
   end
