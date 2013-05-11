@@ -58,6 +58,8 @@ describe "Visiting Products" do
         visit spree.product_path(product)
         click_button "Add To Cart"
         click_button "Checkout"
+        fill_in "order_email", :with => "ryan@spreecommerce.com"
+        click_button "Continue"
         within("tr[data-hook=item_total]") do
           page.should have_content("руб19.99")
         end
@@ -95,7 +97,7 @@ describe "Visiting Products" do
     visit spree.root_path
     page.all('ul.product-listing li').size.should == 0
   end
-  
+
 
   it "should be able to display products priced under 10 dollars" do
     within(:css, '#taxonomies') { click_link "Ruby on Rails" }

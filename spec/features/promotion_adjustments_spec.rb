@@ -43,8 +43,10 @@ describe "Promotion adjustments", :js => true do
         fill_in "Street Address", :with => "1 John Street"
         fill_in "City", :with => "City of John"
         fill_in "Zip", :with => "01337"
-        select country.name, :from => "Country"
-        select state.name, :from => "order[bill_address_attributes][state_id]"
+
+        select country.name, from: "Country", :match => :first
+        select state.name, from: "order[bill_address_attributes][state_id]", :match => :first
+
         fill_in "Phone", :with => "555-555-5555"
 
         # To shipping method screen

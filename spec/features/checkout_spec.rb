@@ -44,6 +44,7 @@ describe "Checkout" do
         click_button "Checkout"
 
         fill_in "order_email", :with => "ryan@spreecommerce.com"
+        click_button "Continue"
         fill_in_address
 
         click_button "Save and Continue"
@@ -59,6 +60,7 @@ describe "Checkout" do
         click_button "Checkout"
 
         fill_in "order_email", :with => "ryan@spreecommerce.com"
+        click_button "Continue"
         fill_in_address
 
         click_button "Save and Continue"
@@ -178,6 +180,7 @@ describe "Checkout" do
       add_mug_to_cart
       click_on "Checkout"
       fill_in "order_email", :with => "ryan@spreecommerce.com"
+      click_button "Continue"
       fill_in_address
       click_on "Save and Continue"
       click_on "Save and Continue"
@@ -202,8 +205,8 @@ describe "Checkout" do
     fill_in "#{address}_lastname", :with => "Bigg"
     fill_in "#{address}_address1", :with => "143 Swan Street"
     fill_in "#{address}_city", :with => "Richmond"
-    find(:select, "#{address}_country_id").first(:option, 'United States of America').select_option
-    find(:select, "#{address}_state_id").first(:option, 'Alabama').select_option
+    select "United States of America", from: "#{address}_country_id", :match => :first
+    select "Alabama", from: "#{address}_state_id", :match => :first
     fill_in "#{address}_zipcode", :with => "12345"
     fill_in "#{address}_phone", :with => "(555) 5555-555"
   end
