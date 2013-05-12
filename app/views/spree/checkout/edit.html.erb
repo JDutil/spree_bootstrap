@@ -1,13 +1,13 @@
 <div id="checkout" data-hook>  
   <%= render :partial => 'spree/shared/error_messages', :locals => { :target => @order } %>
-  
+
   <div class="row" data-hook="checkout_header">
-    <h1 class="columns three alpha" data-hook="checkout_title"><%= Spree.t(:checkout) %></h1>
-    <div class="columns thirteen omega" data-hook="checkout_progress"><%= checkout_progress %></div>
+    <h1 class="span3 alpha" data-hook="checkout_title"><%= Spree.t(:checkout) %></h1>
+    <div class="span9" data-hook="checkout_progress"><%= checkout_progress %></div>
   </div>
-  
+
   <div class="row" data-hook="checkout_content">
-    <div class="columns <%= if @order.state != 'confirm' then 'alpha twelve' else 'alpha omega sixteen' end %>" data-hook="checkout_form_wrapper">
+    <div class="<%= if @order.state != 'confirm' then 'span8' else 'span12' end %>" data-hook="checkout_form_wrapper">
       <%= form_for @order, :url => update_checkout_path(@order.state), :html => { :id => "checkout_form_#{@order.state}" } do |form| %>
         <% unless @order.email? %>
           <p class="field" style='clear: both'>
@@ -19,10 +19,9 @@
       <% end %>
     </div>    
     <% if @order.state != 'confirm' %>
-      <div id="checkout-summary" data-hook="checkout_summary_box" class="columns omega four">
+      <div id="checkout-summary" data-hook="checkout_summary_box" class="span4">
         <%= render :partial => 'summary', :locals => { :order => @order } %>
       </div>
     <% end %>
   </div>
-
 </div>
