@@ -1,12 +1,12 @@
-<div id="checkout" data-hook>  
+<div class='row-fluid' id="checkout" data-hook>
   <%= render :partial => 'spree/shared/error_messages', :locals => { :target => @order } %>
 
-  <div class="row" data-hook="checkout_header">
-    <h1 class="span3 alpha" data-hook="checkout_title"><%= Spree.t(:checkout) %></h1>
+  <div class="row-fluid" data-hook="checkout_header">
+    <h1 class="span3" data-hook="checkout_title"><%= Spree.t(:checkout) %></h1>
     <div class="span9" data-hook="checkout_progress"><%= checkout_progress %></div>
   </div>
 
-  <div class="row" data-hook="checkout_content">
+  <div class="row-fluid" data-hook="checkout_content">
     <div class="<%= if @order.state != 'confirm' then 'span8' else 'span12' end %>" data-hook="checkout_form_wrapper">
       <%= form_for @order, :url => update_checkout_path(@order.state), :html => { :id => "checkout_form_#{@order.state}" } do |form| %>
         <% unless @order.email? %>

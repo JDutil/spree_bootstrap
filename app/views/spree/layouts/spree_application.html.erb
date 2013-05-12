@@ -9,7 +9,7 @@
   </head>
   <body class="<%= body_class %>" id="<%= @body_id || 'default' %>" data-hook="body">
 
-    <div class="container">
+    <div class="container row">
 
       <%= render :partial => 'spree/shared/header' %>
 
@@ -19,7 +19,7 @@
 
         <%= render :partial => 'spree/shared/sidebar' if content_for? :sidebar %>
 
-        <div id="content" class="columns <%= !content_for?(:sidebar) ? "sixteen" : "twelve" %>" data-hook>
+        <div id="content" class="span<%= !content_for?(:sidebar) ? "12" : "8" %>" data-hook>
           <%= flash_messages %>
           <%= yield %>
         </div>
