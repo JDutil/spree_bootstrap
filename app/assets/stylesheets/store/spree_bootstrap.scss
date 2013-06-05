@@ -5,6 +5,13 @@
 @import "bootstrap";
 @import "bootstrap-responsive";
 
+/* Cancel out default spree styles */
+
+.container, .row {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 p {
   padding: 0px;
 }
