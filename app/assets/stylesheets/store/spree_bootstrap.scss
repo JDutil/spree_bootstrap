@@ -7,6 +7,21 @@
 
 /* Cancel out default spree styles */
 
+@media screen{
+  .clearfix:before, .clearfix:after, .row:before, .row:after {
+    content: ' 0020';
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+
+  .row {
+    margin-bottom: 20px;
+  }
+}
+
 .container, .row {
   margin-left: auto;
   margin-right: auto;
@@ -18,4 +33,7 @@ p {
 
 #checkout-summary {
   margin-left: 10px;
+}
+.row, .clearfix {
+  zoom: 1;
 }
