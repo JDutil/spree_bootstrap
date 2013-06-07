@@ -27,6 +27,10 @@
   margin-right: auto;
 }
 
+label {
+  display: inline-block;
+}
+
 p {
   padding: 0px;
 }
@@ -34,6 +38,21 @@ p {
 #checkout-summary {
   margin-left: 10px;
 }
+
 .row, .clearfix {
   zoom: 1;
+}
+
+#products li.alpha {
+  margin-left: 0px;
+}
+
+.steps-data {
+  .alpha {
+    margin-left: 20px !important;
+  }
+
+  .omega {
+    margin-left: 10px !important;
+  }
 }
