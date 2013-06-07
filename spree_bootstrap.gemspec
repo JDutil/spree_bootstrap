@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_core', '~> 2.0.0'
   s.add_dependency 'spree_frontend'
 
-  s.add_development_dependency 'capybara', '~> 2.1'
+  s.add_development_dependency 'capybara', '~> 1.1'
   s.add_development_dependency 'coffee-rails'
   s.add_development_dependency 'coveralls'
   s.add_development_dependency 'database_cleaner'

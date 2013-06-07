@@ -60,7 +60,6 @@ RSpec.configure do |config|
     DatabaseCleaner.start
     # Set some configuration defaults.
     reset_spree_preferences
-    #Spree::Config[:layout] = 'spree/layouts/spree_application'
   end
 
   # After each spec clean the database.
