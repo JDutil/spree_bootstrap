@@ -8,6 +8,10 @@
 /* Cancel out default spree styles */
 
 @media screen{
+  .row {
+    margin-bottom: 20px;
+  }
+
   .clearfix:before, .clearfix:after, .row:before, .row:after {
     content: ' 0020';
     display: block;
@@ -17,15 +21,36 @@
     height: 0;
   }
 
-  .row {
-    margin-bottom: 20px;
+  .row:after, .clearfix:after {
+    clear: both;
+  }
+
+  .container {
+    position: relative;
+    /*width: 960px; overwritten in bootstrap */
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .container:after {
+    height: 0;
+    visibility: hidden;
+    /* overwritten in bootstrap */
+    /*content: " 0020";*/
+    /*display: block;*/
+    /*clear: both;*/
+  }
+  
+  .row, .clearfix {
+    zoom: 1;
+  }
+
+  .container, .row {
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
-.container, .row {
-  margin-left: auto;
-  margin-right: auto;
-}
 
 label {
   display: inline-block;
@@ -39,9 +64,6 @@ p {
   margin-left: 10px;
 }
 
-.row, .clearfix {
-  zoom: 1;
-}
 
 #products li.alpha {
   margin-left: 0px;
