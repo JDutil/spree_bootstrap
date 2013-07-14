@@ -65,9 +65,13 @@ p {
   margin-left: 10px;
 }
 
-
 #products li.alpha {
   margin-left: 0px;
+}
+
+.add-to-cart input,
+.edit_order input {
+  margin-bottom: 0px;
 }
 
 .steps-data {
