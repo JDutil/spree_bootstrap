@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe "Checkout" do
-  let!(:country) { create(:country, :name => "United States of America",:states_required => true) }
-  let!(:state) { create(:state, :name => "Alabama", :country => country) }
+
+  let!(:country) { create(:country, :states_required => true) }
+  let!(:state) { create(:state, :country => country) }
   let!(:shipping_method) { create(:shipping_method) }
   let!(:stock_location) { create(:stock_location) }
   let!(:mug) { create(:product, :name => "RoR Mug") }
@@ -43,7 +44,6 @@ describe "Checkout" do
         click_button "Checkout"
 
         fill_in "order_email", :with => "ryan@spreecommerce.com"
-        click_button "Continue"
         fill_in_address
 
         click_button "Save and Continue"
@@ -59,7 +59,6 @@ describe "Checkout" do
         click_button "Checkout"
 
         fill_in "order_email", :with => "ryan@spreecommerce.com"
-        click_button "Continue"
         fill_in_address
 
         click_button "Save and Continue"
@@ -93,6 +92,8 @@ describe "Checkout" do
       click_button "Save and Continue"
       click_button "Place Order"
       page.should have_content("Bogus Gateway: Forced failure")
+      click_button "Place Order"
+      page.should have_content("No pending payments")
     end
   end
 
@@ -117,7 +118,7 @@ describe "Checkout" do
 
       # prevent form submit to verify button is disabled
       page.execute_script("$('#checkout_form_payment').submit(function(){return false;})")
-      pending 'not happening'
+
       page.should_not have_selector('input.button[disabled]')
       click_button "Save and Continue"
       page.should have_selector('input.button[disabled]')
@@ -139,7 +140,12 @@ describe "Checkout" do
     let(:credit_cart_payment) {create(:bogus_payment_method, :environment => 'test') }
     let(:check_payment) {create(:payment_method, :environment => 'test') }
 
-    before(:each) do
+    after do
+      Capybara.ignore_hidden_elements = true
+    end
+
+    before do
+      Capybara.ignore_hidden_elements = false
       order = OrderWalkthrough.up_to(:delivery)
       order.stub(:available_payment_methods => [check_payment,credit_cart_payment])
       order.user = create(:user)
@@ -172,7 +178,6 @@ describe "Checkout" do
       add_mug_to_cart
       click_on "Checkout"
       fill_in "order_email", :with => "ryan@spreecommerce.com"
-      click_button "Continue"
       fill_in_address
       click_on "Save and Continue"
       click_on "Save and Continue"
@@ -187,7 +192,94 @@ describe "Checkout" do
       click_on "Save and Continue"
       click_on "Save and Continue"
 
-      page.should have_content(Spree::Order.last.number)
+      expect(current_path).to eql(spree.order_path(Spree::Order.last))
+    end
+  end
+
+  context "from payment step customer goes back to cart", js: true do
+    before do
+      add_mug_to_cart
+      click_on "Checkout"
+      fill_in "order_email", :with => "ryan@spreecommerce.com"
+      fill_in_address
+      click_on "Save and Continue"
+      click_on "Save and Continue"
+      expect(current_path).to eql(spree.checkout_state_path("payment"))
+    end
+
+    context "and updates line item quantity" do
+      it "uptades shipments properly" do
+        visit spree.cart_path
+        within ".cart-item-quantity" do
+          fill_in first("input")["name"], with: 3
+        end
+
+        click_on "Update"
+        visit spree.checkout_state_path("payment")
+        click_on "Save and Continue"
+
+        expect(Spree::InventoryUnit.count).to eq 3
+      end
+    end
+
+    context "and adds new product to cart" do
+      let!(:bag) { create(:product, :name => "RoR Bag") }
+
+      it "updates shipments properly" do
+        visit spree.root_path
+        click_link bag.name
+        click_button "add-to-cart-button"
+
+        visit spree.checkout_state_path("payment")
+        click_on "Save and Continue"
+
+        expect(Spree::InventoryUnit.count).to eq 2
+      end
+    end
+  end
+
+  context "in coupon promotion, submits coupon along with payment", js: true do
+    let!(:promotion) { Spree::Promotion.create(name: "Huhuhu", event_name: "spree.checkout.coupon_code_added", code: "huhu") }
+    let!(:calculator) { Spree::Calculator::FlatPercentItemTotal.create(preferred_flat_percent: "10") }
+    let!(:action) { Spree::Promotion::Actions::CreateAdjustment.create({calculator: calculator}, without_protection: true) }
+
+    before do
+      promotion.actions << action
+
+      add_mug_to_cart
+      click_on "Checkout"
+
+      fill_in "order_email", :with => "ryan@spreecommerce.com"
+      fill_in_address
+      click_on "Save and Continue"
+
+      click_on "Save and Continue"
+      expect(current_path).to eql(spree.checkout_state_path("payment"))
+    end
+
+    it "makes sure payment reflects order total with discounts" do
+      fill_in "Coupon Code", with: promotion.code
+      click_on "Save and Continue"
+
+      page.should have_content(promotion.name)
+      expect(Spree::Payment.first.amount.to_f).to eq Spree::Order.last.total.to_f
+    end
+
+    context "invalid coupon" do
+      it "doesnt create a payment record" do
+        fill_in "Coupon Code", with: 'invalid'
+        click_on "Save and Continue"
+
+        expect(Spree::Payment.count).to eq 0
+        expect(page).to have_content(Spree.t(:coupon_code_not_found))
+      end
+    end
+
+    context "doesn't fill in coupon code input" do
+      it "advances just fine" do
+        click_on "Save and Continue"
+        expect(current_path).to eql(spree.order_path(Spree::Order.last))
+      end
     end
   end
 

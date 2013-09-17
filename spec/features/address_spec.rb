@@ -6,7 +6,13 @@ describe "Address" do
 
   stub_authorization!
 
+  after do
+    Capybara.ignore_hidden_elements = true
+  end
+
   before do
+    Capybara.ignore_hidden_elements = false
+
     visit spree.root_path
 
     click_link "RoR Mug"
@@ -20,12 +26,14 @@ describe "Address" do
 
   context "country requires state", :js => true, :focus => true do
     let!(:canada) { create(:country, :name => "Canada", :states_required => true, :iso => "CA") }
+    let!(:uk) { create(:country, :name => "United Kingdom", :states_required => true, :iso => "UK") }
+
+    before { Spree::Config[:default_country_id] = uk.id }
 
     context "but has no state" do
       it "shows the state input field" do
         click_button "Checkout"
-        fill_in "order_email", :with => "ryan@spreecommerce.com"
-        click_button "Continue"
+        sleep 15
         select canada.name, :from => @country_css
         page.should have_selector(@state_select_css, visible: false)
         page.should have_selector(@state_name_css, visible: true)
@@ -41,12 +49,12 @@ describe "Address" do
 
       it "shows the state collection selection" do
         click_button "Checkout"
-        fill_in "order_email", :with => "ryan@spreecommerce.com"
-        click_button "Continue"
+
         select canada.name, :from => @country_css
         page.should have_selector(@state_select_css, visible: true)
         page.should have_selector(@state_name_css, visible: false)
         find(@state_select_css)['class'].should =~ /required/
+        find(@state_select_css)['class'].should_not =~ /hidden/
         find(@state_name_css)['class'].should_not =~ /required/
       end
     end
@@ -56,8 +64,6 @@ describe "Address" do
 
       it "clears the state name" do
         click_button "Checkout"
-        fill_in "order_email", :with => "ryan@spreecommerce.com"
-        click_button "Continue"
         select canada.name, :from => @country_css
         page.find(@state_name_css).set("Toscana")
 
@@ -75,8 +81,7 @@ describe "Address" do
 
     it "shows a disabled state input field" do
        click_button "Checkout"
-       fill_in "order_email", :with => "ryan@spreecommerce.com"
-       click_button "Continue"
+
        select france.name, :from => @country_css
        page.should have_selector(@state_select_css, visible: false)
        page.should have_selector(@state_name_css, visible: false)
