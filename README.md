@@ -1,6 +1,8 @@
 SpreeBootstrap
 ==============
 
+**NOTICE: This repo was built for Spree 2-0-stable & Bootstrap 2, and has not been updated yet for the latest versions of Spree.  There is a newer more promising alternative being developed for the latest versions of Spree and Bootstrap 3 located at [https://github.com/200Creative/spree_bootstrap_frontend](https://github.com/200Creative/spree_bootstrap_frontend) please check it out if your looking for a newer version!**
+
 This project aims to replace the spree_frontend's use of the skeleton css framework in favor of Twitter Bootstrap.
 
 [![Build Status](https://secure.travis-ci.org/jdutil/spree_bootstrap.png)](http://travis-ci.org/jdutil/spree_bootstrap)
