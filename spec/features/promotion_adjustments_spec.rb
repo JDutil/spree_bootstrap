@@ -6,15 +6,15 @@ describe "Promotion adjustments", :js => true do
   let!(:zone) { create(:zone) }
   let!(:shipping_method) { create(:shipping_method) }
   let!(:payment_method) { create(:payment_method) }
-  let!(:product) { create(:product, :name => "RoR Mug") }
+  let!(:product) { create(:product, :name => "RoR Mug", :price => 20) }
 
   context "visitor makes checkout as guest without registration" do
     def create_basic_coupon_promotion(code)
-      promotion = Spree::Promotion.create!({:name       => code.titleize,
-                                            :code       => code,
-                                            :event_name => "spree.checkout.coupon_code_added",
-                                            :starts_at  => 1.day.ago,
-                                            :expires_at => 1.day.from_now}, :without_protection => true)
+      promotion = Spree::Promotion.create!(:name       => code.titleize,
+                                           :code       => code,
+                                           :event_name => "spree.checkout.coupon_code_added",
+                                           :starts_at  => 1.day.ago,
+                                           :expires_at => 1.day.from_now)
 
      calculator = Spree::Calculator::FlatRate.new
      calculator.preferred_amount = 10
@@ -32,6 +32,7 @@ describe "Promotion adjustments", :js => true do
     # OrdersController
     context "on the payment page" do
       before do
+
         visit spree.root_path
         click_link "RoR Mug"
         click_button "add-to-cart-button"
@@ -43,10 +44,8 @@ describe "Promotion adjustments", :js => true do
         fill_in "Street Address", :with => "1 John Street"
         fill_in "City", :with => "City of John"
         fill_in "Zip", :with => "01337"
-
-        select country.name, from: "Country", :match => :first
-        select state.name, from: "order[bill_address_attributes][state_id]", :match => :first
-
+        select country.name, :from => "Country"
+        select state.name, :from => "order[bill_address_attributes][state_id]"
         fill_in "Phone", :with => "555-555-5555"
 
         # To shipping method screen
@@ -146,6 +145,39 @@ describe "Promotion adjustments", :js => true do
         fill_in "order_coupon_code", :with => "onetwo"
         click_button "Update"
         page.should have_content(Spree.t(:coupon_code_expired))
+      end
+
+      context "calculates the correct amount of money saved with flat percent promotions" do
+        before do
+          calculator = Spree::Calculator::FlatPercentItemTotal.new
+          calculator.preferred_flat_percent = 20
+          promotion.actions.first.calculator = calculator
+          promotion.save
+
+          create(:product, :name => "Spree Mug", :price => 10)
+        end
+
+        specify do
+          visit spree.root_path
+          click_link "Spree Mug"
+          click_button "add-to-cart-button"
+
+          visit spree.cart_path
+          fill_in "order_coupon_code", :with => "onetwo"
+          click_button "Update"
+
+          fill_in "order_line_items_attributes_0_quantity", :with => 2
+          fill_in "order_line_items_attributes_1_quantity", :with => 2
+          click_button "Update"
+
+          within '#cart_adjustments' do
+            # 20% off $60 item_total (2x $10 + 2x $20)
+            page.should have_content("Promotion (Onetwo) -$12.00")
+          end
+          within '.order-total' do
+            page.should have_content("$48.00")
+          end
+        end
       end
     end
   end
