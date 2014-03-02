@@ -1,3 +1,4 @@
+<div class='row'>
 <div class="span6" data-hook="billing_fieldset_wrapper">
   <fieldset id="billing" data-hook>
     <%= form.fields_for :bill_address do |bill_form| %>
@@ -18,6 +19,7 @@
       <%= render :partial => 'spree/address/form', :locals => { :form => ship_form, :address_type => 'shipping', :address => @order.ship_address } %>
     <% end %>
   </fieldset>
+</div>
 </div>
 <hr class="clear" />
 <div class="form-buttons" data-hook="buttons">
