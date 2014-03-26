@@ -18,10 +18,10 @@
               <col style="width: 20%;" />
             </colgroup>
             <thead>
-              <th>image</th>
-              <th>name</th>
-              <th>quantity</th>
-              <th>price</th>
+              <th></th>
+              <th align='left'><%= Spree.t(:item) %></th>
+              <th><%= Spree.t(:qty) %></th>
+              <th><%= Spree.t(:price) %></th>
             </thead>
             <tbody>
               <% ship_form.object.manifest.each do |item| %>
@@ -42,7 +42,7 @@
                 <label>
                   <%= ship_form.radio_button :selected_shipping_rate_id, rate.id %>
                   <span class="rate-name"><%= rate.name %></span>
-                  <span class="rate-cost"><%= number_to_currency rate.cost %></span>
+                  <span class="rate-cost"><%= rate.display_cost %></span>
                 </label>
               </li>
             <% end %>
@@ -51,7 +51,7 @@
 
       <% end %>
 
-      <% if @differentiator.missing? %>
+      <% if @differentiator.try(:missing?) %>
         <div class="shipment unshippable">
           <h3 class="stock-location" data-hook="stock-location">
             <%= Spree.t(:unshippable_items) %>
@@ -64,10 +64,10 @@
               <col style="width: 20%;" />
             </colgroup>
             <thead>
-              <th>image</th>
-              <th>name</th>
-              <th>quantity</th>
-              <th>price</th>
+              <th></th>
+              <th align='left'><%= Spree.t(:item) %></th>
+              <th><%= Spree.t(:qty) %></th>
+              <th><%= Spree.t(:price) %></th>
             </thead>
             <tbody>
               <% @differentiator.missing.each do |variant, quantity| %>
@@ -96,5 +96,5 @@
 <br />
 
 <div class="form-buttons" data-hook="buttons">
-  <%= submit_tag Spree.t(:save_and_continue), :class => 'btn-primary' %>
+  <%= submit_tag Spree.t(:save_and_continue), :class => 'continue button primary' %>
 </div>

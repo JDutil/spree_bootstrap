@@ -40,7 +40,6 @@ RSpec.configure do |config|
   # current_path.should eql(spree.products_path)
   config.include Spree::TestingSupport::UrlHelpers
   config.include Spree::TestingSupport::ControllerRequests
-  config.include Spree::TestingSupport::Flash
   config.include Spree::TestingSupport::Preferences
 
   # Capybara javascript drivers require transactional fixtures set to false, and we use DatabaseCleaner
