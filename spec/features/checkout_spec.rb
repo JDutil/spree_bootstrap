@@ -100,7 +100,7 @@ describe "Checkout", inaccessible: true do
       Spree::CheckoutController.any_instance.stub(:try_spree_current_user => user)
     end
 
-    it "redirects to payment page", inaccessible: true do
+    it "redirects to payment page", js: true do
       visit spree.checkout_state_path(:delivery)
       click_button "Save and Continue"
       choose "Credit Card"
