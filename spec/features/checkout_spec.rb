@@ -139,7 +139,7 @@ describe "Checkout", inaccessible: true do
 
   context "and likes to double click buttons" do
     let!(:user) { create(:user) }
-    
+
     let!(:order) do
       order = OrderWalkthrough.up_to(:delivery)
       order.stub :confirmation_required? => true
@@ -291,7 +291,7 @@ describe "Checkout", inaccessible: true do
     before do
       add_mug_to_cart
       click_on "Checkout"
-      fill_in "order_email", :with => "test@example.com"
+      fill_in "order_email", with: "test@example.com"
       click_on 'Continue'
       fill_in_address
       click_on "Save and Continue"
