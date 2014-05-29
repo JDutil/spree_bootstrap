@@ -30,6 +30,7 @@ describe "viewing products" do
     end
 
     before do
+      create(:store)
       Capybara.ignore_hidden_elements = false
     end
 
@@ -48,7 +49,7 @@ describe "viewing products" do
 
     it 'display title from taxon root and taxon name' do
       visit '/t/category/super-clothing/t-shirts'
-      page.should have_title('Category - T-Shirts - Spree Demo Site')
+      page.should have_title('Category - T-Shirts - ' + Spree::Store.default.name)
     end
 
     # Regression test for #2814
