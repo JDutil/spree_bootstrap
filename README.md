@@ -5,7 +5,7 @@ SpreeBootstrap
 
 This project aims to replace the spree_frontend's use of the skeleton css framework in favor of Twitter Bootstrap.
 
-[![Build Status](https://secure.travis-ci.org/jdutil/spree_bootstrap.png)](http://travis-ci.org/jdutil/spree_bootstrap)
+[![Build Status](https://secure.travis-ci.org/JDutil/spree_bootstrap.png)](http://travis-ci.org/JDutil/spree_bootstrap)
 [![Code Climate](https://codeclimate.com/github/jdutil/spree_bootstrap.png)](https://codeclimate.com/github/jdutil/spree_bootstrap)
 [![Coverage Status](https://coveralls.io/repos/jdutil/spree_bootstrap/badge.png?branch=master)](https://coveralls.io/r/jdutil/spree_bootstrap)
 [![Dependency Status](https://gemnasium.com/jdutil/spree_bootstrap.png?travis)](https://gemnasium.com/jdutil/spree_bootstrap)
